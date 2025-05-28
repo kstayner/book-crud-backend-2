@@ -72,20 +72,6 @@ class BookController {
         }
     }
 
-    static async patchBook(req, res) {
-        try {
-            const updates = req.body;
-            const updated = await BookService.patchBook(req.params.id, updates);
-
-            if (!updated) return res.status(404).json({ error: 'Book not found' });
-
-            const book = await BookService.getBookById(req.params.id);
-            res.status(200).json(book);
-        } catch (error) {
-            BookController.handleError(res, error);
-        }
-    }
-
     static handleError(res, error) {
         console.error(error);
         res.status(500).json({ error: error.message || 'Internal Server Error' });
