@@ -72,6 +72,20 @@ class BookController {
         }
     }
 
+    static async updateBookPartial(req, res) {
+        try {
+            const { title, publication_year, author_id } = req.body;
+            const updated = await BookService.updateBookPartial(req.params.id, { title, publication_year, author_id });
+
+            if (!updated) return res.status(404).json({ error: 'Book not found' });
+
+            const book = await BookService.getBookById(req.params.id);
+            res.json(book);
+        } catch (error) {
+            BookController.handleError(res, error);
+        }
+    }
+
     static handleError(res, error) {
         console.error(error);
         res.status(500).json({ error: error.message || 'Internal Server Error' });
