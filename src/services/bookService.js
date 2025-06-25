@@ -40,7 +40,7 @@ class BookService {
             callback(null, books || []);
         });
     }
-    
+
 
     static async updateBook(id, title, publication_year, author_id) {
         return new Promise((resolve, reject) => {
@@ -57,6 +57,22 @@ class BookService {
                         if (err) return reject(err);
                         resolve(this.changes > 0);
                     });
+                });
+            });
+        });
+    }
+
+    static async updateBookPartial(id, updateData) {
+        return new Promise((resolve, reject) => {
+            db.get('SELECT * FROM books WHERE id = ?', [id], (err, book) => {
+                if (err) return reject(err);
+                if (!book) return resolve(false);
+
+                const updatedBook = { ...book, ...updateData };
+                const sql = 'UPDATE books SET title = ?, publication_year = ?, author_id = ? WHERE id = ?';
+                db.run(sql, [updatedBook.title, updateData.publication_year || book.publication_year, updateData.author_id || book.author_id, id], function (err) {
+                    if (err) return reject(err);
+                    resolve(this.changes > 0);
                 });
             });
         });
@@ -82,8 +98,8 @@ class BookService {
             callback(null, !!row);
         });
     }
-    
-    
+
+
 }
 
 module.exports = BookService;
