@@ -61,6 +61,20 @@ class BookController {
         }
     }
 
+    static async updateBookPartial(req, res) {
+        try {
+            const { title, publication_year, author_id } = req.body;
+            const updated = await BookService.updateBookPartial(req.params.id, { title, publication_year, author_id });
+
+            if (!updated) return res.status(404).json({ error: 'Book not found' });
+
+            const book = await BookService.getBookById(req.params.id);
+            res.json(book);
+        } catch (error) {
+            BookController.handleError(res, error);
+        }
+    }
+
     static async deleteBook(req, res) {
         try {
             const deleted = await BookService.deleteBook(req.params.id);

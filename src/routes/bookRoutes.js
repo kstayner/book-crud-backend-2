@@ -7,6 +7,7 @@ router.get('/', bookController.getAllBooks);
 router.get('/:id', bookController.getBookById);
 router.get('/author/:author_id', bookController.getBooksByAuthor);
 router.put('/:id', bookController.updateBook);
+router.patch('/:id', bookController.updateBookPartial);
 router.delete('/:id', bookController.deleteBook);
 
 module.exports = router;
